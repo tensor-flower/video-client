@@ -1,6 +1,7 @@
 import React from "react";
 
 const video = ({ videoId }) => {
+    const url = `https://video-server-sg.s3-ap-southeast-1.amazonaws.com/${videoId}.mp4`;
     return (
         <>
             <h2>{videoId}</h2>
@@ -12,10 +13,7 @@ const video = ({ videoId }) => {
                 height="400"
                 data-setup="{}"
             >
-                <source
-                    src={`http://localhost:8080/videos/${videoId}`}
-                    type="video/mp4"
-                />
+                <source src={url} type="video/mp4" />
             </video>
         </>
     );
