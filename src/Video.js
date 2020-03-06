@@ -1,7 +1,8 @@
 import React from "react";
+import { videoServer } from "./constants/constant";
 
 const video = ({ videoId }) => {
-    const url = `https://video-server-sg.s3-ap-southeast-1.amazonaws.com/${videoId}.mp4`;
+    const url = `${videoServer}${videoId}.mp4`;
     return (
         <>
             <h2>{videoId}</h2>

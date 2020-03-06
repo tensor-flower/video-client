@@ -1,15 +1,17 @@
 import React, { Component } from "react";
 import { Link } from "@reach/router";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { server } from "./constants/constant";
 
 class Home extends Component {
     state = {
         videos: [],
-        selectedFile: null
+        loading: true
     };
 
     async componentDidMount() {
         try {
-            const res = await fetch("https://fierce-lake-35299.herokuapp.com/");
+            const res = await fetch(server);
             const data = await res.json();
             if (Array.isArray(data) && data.length > 0) {
                 this.setState({ videos: data });
@@ -17,34 +19,16 @@ class Home extends Component {
         } catch (e) {
             console.error(e);
         }
+        this.setState({ loading: false });
     }
 
-    uploadVideo = async () => {
-        const { selectedFile } = this.state;
-        if (!selectedFile) return;
-
-        const data = new FormData();
-        data.append("file", selectedFile);
-
-        try {
-            const res = await fetch(
-                "https://fierce-lake-35299.herokuapp.com/upload",
-                {
-                    method: "POST",
-                    body: data
-                }
-            );
-            console.log(res);
-        } catch (e) {
-            console.error(e);
-        }
-    };
-
     render() {
-        const { videos } = this.state;
+        const { videos, loading } = this.state;
         return (
             <>
-                {!videos.length ? (
+                {loading ? (
+                    <CircularProgress />
+                ) : !videos.length ? (
                     <p>No videos</p>
                 ) : (
                     <ul>
@@ -55,16 +39,6 @@ class Home extends Component {
                         ))}
                     </ul>
                 )}
-                <input
-                    type="file"
-                    name="file"
-                    onChange={e => {
-                        this.setState({ selectedFile: e.target.files[0] });
-                    }}
-                />
-                <button type="button" onClick={this.uploadVideo}>
-                    Upload
-                </button>
             </>
         );
     }
